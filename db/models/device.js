@@ -7,7 +7,8 @@ const Device = new mongoose.Schema({
         required: true
     },
     deviceStatus: {
-        type: mongoose.Schema.Types.Mixed
+        type: mongoose.Schema.Types.Mixed,
+        default: {}
     },
     deviceName: {
         type: String,
@@ -18,10 +19,11 @@ const Device = new mongoose.Schema({
         required: true,
         ref: 'User'
     },
-    triggers: {
-        type: [{type: mongoose.Schema.Types.Mixed}],
-        default: []
+    deviceType: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'DeviceInfo'
     }
-});
+}, {timestamps: true});
+
 
 module.exports = mongoose.model('Device', Device);

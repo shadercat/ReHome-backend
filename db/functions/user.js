@@ -1,53 +1,42 @@
-const mongoose = require('mongoose');
-const crypto = require('crypto');
-
+const crypt = require('../../functions/hashing');
 const userModel = require('../models/user');
-const error = require('../../constants/Errors');
-const functions = require('../../functions/simpleErrorHandler');
 
 exports.createUser = function (userData) {
-    userData.password = hash(userData.password);
+    userData.password = crypt.getHash(userData.password);
     return new userModel(userData).save();
 };
 
-function hash(text) {
-    return crypto.createHash('sha256')
-        .update(text).digest('base64');
-}
-
 exports.getInsensitiveUserData = function (query) {
     return userModel.findOne(query)
-        .select({'password': 0, 'devices': 0, 'resourceGroups': 0}).lean();
+        .select({'password': 0, 'devices': 0, 'resourceGroups': 0, '__v': 0, 'updatedAt': 0}).lean();
 };
 
 exports.checkAndGetUser = function (userData) {
     return userModel
         .findOne({email: userData.email})
         .then((doc) => {
-            if (doc && doc.password === hash(userData.password)) {
+            if (doc && doc.password === crypt.getHash(userData.password)) {
                 return Promise.resolve(doc);
             } else {
-                return Promise.reject(error.USER_DATA_WRONG);
+                return Promise.resolve(undefined);
             }
         })
         .catch((err) => {
-            functions.errorLogger(err);
-            return Promise.reject(error.DATABASE_FAIL);
+            return Promise.reject(err);
         })
 };
 
 exports.checkUserPassword = function (userData) {
     userModel.findOne({email: userData.email})
         .then((doc) => {
-            if (doc && doc.password === hash(userData.password)) {
-                return true;
-            } else {
-                return false;
-            }
+            return Promise.resolve(doc && doc.password === crypt.getHash(userData.password));
         })
         .catch((err) => {
-            functions.errorLogger(err);
-            return false
+            return Promise.reject(err);
         })
+};
+
+exports.findAndUpdateUserInfo = function (query, data) {
+    return userModel.findOneAndUpdate(query, data, {new: true});
 };
 

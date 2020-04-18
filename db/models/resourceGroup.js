@@ -16,6 +16,6 @@ const ResourceGroup = new mongoose.Schema({
         type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Device'}],
         default: []
     }
-});
+}, {timestamps: true});
 
 module.exports = mongoose.model('ResourceGroup', ResourceGroup);

@@ -6,8 +6,11 @@ const logger = require('morgan');
 const session = require('express-session');
 
 const dbConnection = require('./db/dbConnection');
+const modifier = require('./functions/responseModifier');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const adminRouter = require('./routes/admin');
+const deviceRouter = require('./routes/device');
 
 const SessionStore = require('connect-mongo')(session);
 
@@ -42,11 +45,12 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use(setResponseHeaders);
+app.use(modifier.setResponseHeaders);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/admins', adminRouter);
+app.use('/devices', deviceRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -63,14 +67,5 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
-
-function setResponseHeaders(req, res, next) {
-    let requestOrigin = req.headers.origin;
-    res.append('Access-Control-Allow-Origin', requestOrigin);
-    res.append('Access-Control-Allow-Methods', 'GET,POST,DELETE,PUT');
-    res.append('Access-Control-Allow-Headers', 'Content-Type');
-    res.append('Access-Control-Allow-Credentials', 'true');
-    next();
-}
 
 module.exports = app;

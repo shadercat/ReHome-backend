@@ -23,11 +23,14 @@ const User = new mongoose.Schema({
         default: []
     },
     resourceGroups: {
-        type: [{type: mongoose.Schema.Types.ObjectId, ref: 'ResourceGroup'}]
+        type: [{type: mongoose.Schema.Types.ObjectId, ref: 'ResourceGroup'}],
+        default: []
     },
     additionalData: {
-        type: mongoose.Schema.Types.Mixed
+        type: mongoose.Schema.Types.Mixed,
+        default: {}
+
     }
-});
+}, {timestamps: true});
 
 module.exports = mongoose.model('User', User);
