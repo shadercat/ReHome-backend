@@ -8,6 +8,10 @@ exports.getDevice = function (query) {
     return deviceModel.findOne(query).lean();
 };
 
+exports.getInsensitiveDeviceData = function (query) {
+    return deviceModel.findOne(query).select({owner: 0, _id: 0});
+};
+
 exports.updateDevice = function (query, data) {
     return deviceModel.findOneAndUpdate(query, data, {new: true});
 };

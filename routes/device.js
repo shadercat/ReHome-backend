@@ -1,13 +1,13 @@
 const express = require('express');
-const accessMiddleware = require('../middlewares/access');
-const deviceMiddleware = require('../middlewares/interactionDevice');
+const accessModule = require('../pipelines/access');
+const deviceModule = require('../pipelines/interactionDevice');
 const router = express.Router();
 
-router.post('/adddevice', accessMiddleware.onlyAuthorizedUserDoor, deviceMiddleware.addDevice);
+router.post('/adddevice', accessModule.onlyAuthorizedUserDoor, deviceModule.addDevice);
 
-router.post('/updatedevice', accessMiddleware.onlyAuthorizedUserDoor, deviceMiddleware.updateDeviceName);
+router.post('/updatedevice', accessModule.onlyAuthorizedUserDoor, deviceModule.updateDeviceName);
 
-router.delete('/deldevice', accessMiddleware.onlyAuthorizedUserDoor, deviceMiddleware.deleteDevice);
+router.delete('/deldevice', accessModule.onlyAuthorizedUserDoor, deviceModule.deleteDevice);
 
 
 module.exports = router;

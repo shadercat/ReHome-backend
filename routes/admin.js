@@ -1,23 +1,23 @@
 const express = require('express');
-const accessMiddleware = require('../middlewares/access');
-const adminMiddleware = require('../middlewares/admin');
-const adminOperationMiddleware = require('../middlewares/adminOperation');
+const accessModule = require('../pipelines/access');
+const adminModule = require('../pipelines/admin');
+const adminOperationModule = require('../pipelines/adminOperation');
 const router = express.Router();
 
-router.post('/login', adminMiddleware.loginAsAdmin);
+router.post('/login', adminModule.loginAsAdmin);
 
-router.get('/authorized', adminMiddleware.getIsAuthorizedAsAdmin);
+router.get('/authorized', adminModule.getIsAuthorizedAsAdmin);
 
-router.post('/reg', adminMiddleware.registerNewAdmin);
+router.post('/reg', adminModule.registerNewAdmin);
 
-router.post('/logout', adminMiddleware.logoutAdmin);
+router.post('/logout', adminModule.logoutAdmin);
 
-router.get('/admindata', accessMiddleware.onlyAuthorizedAdminDoor, adminMiddleware.getAdminData);
+router.get('/admindata', accessModule.onlyAuthorizedAdminDoor, adminModule.getAdminData);
 
-router.post('/newdevice', accessMiddleware.onlyAuthorizedAdminDoor, adminOperationMiddleware.createNewDeviceInfo);
+router.post('/newdevice', accessModule.onlyAuthorizedAdminDoor, adminOperationModule.createNewDeviceInfo);
 
-router.delete('/deldevice', accessMiddleware.onlyAuthorizedAdminDoor, adminOperationMiddleware.deleteDeviceInfo);
+router.delete('/deldevice', accessModule.onlyAuthorizedAdminDoor, adminOperationModule.deleteDeviceInfo);
 
-router.post('/updatedevice', accessMiddleware.onlyAuthorizedAdminDoor, adminOperationMiddleware.updateDeviceInfo);
+router.post('/updatedevice', accessModule.onlyAuthorizedAdminDoor, adminOperationModule.updateDeviceInfo);
 
 module.exports = router;

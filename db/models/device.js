@@ -22,6 +22,10 @@ const Device = new mongoose.Schema({
     deviceType: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'DeviceInfo'
+    },
+    additionalData: {
+        type: mongoose.Schema.Types.Mixed,
+        default: {}
     }
 }, {timestamps: true});
 

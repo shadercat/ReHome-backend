@@ -1,5 +1,5 @@
 const express = require('express');
-const openInfo = require('../middlewares/openData');
+const openInfo = require('../pipelines/openData');
 const router = express.Router();
 
 /* GET home page. */
@@ -8,5 +8,9 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/devices', openInfo.getDevicesInfo);
+
+router.get('/error', function (req, res, next) {
+    next(createError())
+});
 
 module.exports = router;

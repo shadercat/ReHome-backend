@@ -1,17 +1,17 @@
 const express = require('express');
-const accountMiddleware = require('../middlewares/account');
-const accessMiddleware = require('../middlewares/access');
-const userMiddleware = require('../middlewares/user');
+const accountModule = require('../pipelines/account');
+const accessModule = require('../pipelines/access');
+const userModule = require('../pipelines/user');
 const router = express.Router();
 
-router.get('/authorized', accountMiddleware.getIsAuthorized);
+router.get('/authorized', accountModule.getIsAuthorized);
 
-router.post('/login', accountMiddleware.login);
+router.post('/login', accountModule.login);
 
-router.post('/logout', accountMiddleware.logout);
+router.post('/logout', accountModule.logout);
 
-router.post('/registration', accountMiddleware.registerNewUser);
+router.post('/signup', accountModule.registerNewUser);
 
-router.get('/userdata', accessMiddleware.onlyAuthorizedUserDoor, userMiddleware.getUserData);
+router.get('/userdata', accessModule.onlyAuthorizedUserDoor, userModule.getUserData);
 
 module.exports = router;

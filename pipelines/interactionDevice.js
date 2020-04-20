@@ -77,3 +77,17 @@ exports.deleteDevice = function (req, res, next) {
             errorHandler.errorHandler(error, res);
         })
 };
+
+exports.getDeviceInfo = function (req, res, next) {
+    deviceDBRequests.getInsensitiveDeviceData({deviceCode: req.body.code, owner: req.session.user.db_id})
+        .then((result) => {
+            if (result) {
+                res.send(response.responseWithDataSuccess(result));
+            } else {
+                res.send(response.responseWithDataFail(mError.NOT_FOUND));
+            }
+        })
+        .catch((error) => {
+            errorHandler.errorHandler(error, res);
+        })
+};

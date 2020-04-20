@@ -6,6 +6,7 @@ const logger = require('morgan');
 const session = require('express-session');
 
 const dbConnection = require('./db/dbConnection');
+const errorHandler = require('./functions/errorHandler');
 const modifier = require('./functions/responseModifier');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -55,6 +56,14 @@ app.use('/devices', deviceRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     next(createError(404));
+});
+
+app.use(function (err, req, res, next) {
+    if (!err.properties) {
+        next(err);
+    } else {
+        errorHandler(err.properties, res);
+    }
 });
 
 // error handler
