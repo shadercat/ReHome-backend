@@ -1,24 +1,24 @@
-const deviceInfoModel = require('../models/deviceInfo');
+const deviceTypeModel = require('../models/deviceType');
 
 exports.createNewDeviceInfo = function (info) {
-    return new deviceInfoModel(info).save();
+    return new deviceTypeModel(info).save();
 };
 
 exports.updateDeviceInfo = function (query, data) {
-    return deviceInfoModel.findOneAndUpdate(query, data, {new: true});
+    return deviceTypeModel.findOneAndUpdate(query, data, {new: true});
 };
 
 exports.deleteDeviceInfo = function (query) {
-    return deviceInfoModel.deleteOne(query);
+    return deviceTypeModel.deleteOne(query);
 };
 
 exports.getDevicesInfo = function () {
-    return deviceInfoModel.find()
+    return deviceTypeModel.find()
         .select({triggers: 0, _id: 0});
 };
 
 exports.findAndGetDeviceInfo = function (query) {
-    return deviceInfoModel.findOne(query);
+    return deviceTypeModel.findOne(query);
 };
 
 exports.safeDeleteDeviceInfo = function (query) {
@@ -27,5 +27,5 @@ exports.safeDeleteDeviceInfo = function (query) {
         description: "Deleted",
         triggers: []
     };
-    return deviceInfoModel.findOneAndUpdate(query, deletedInfo, {new: true});
+    return deviceTypeModel.findOneAndUpdate(query, deletedInfo, {new: true});
 };

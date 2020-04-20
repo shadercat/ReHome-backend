@@ -1,5 +1,5 @@
 const response = require('../responseFactory');
-const DBRequests = require('../db/functions/deviceInfo');
+const DBRequests = require('../db/functions/deviceType');
 const createError = require('http-errors');
 const mError = require('../constants/Errors');
 

@@ -1,11 +1,26 @@
 const response = require('../responseFactory');
-const userDBRequests = require('../db/functions/deviceInfo');
+const deviceTypeDBRequests = require('../db/functions/deviceType');
 const createError = require('http-errors');
 const mError = require('../constants/Errors');
+const dataExtractor = require('../functions/dataExtractor');
 
 
-exports.createNewDeviceInfo = function (req, res, next) {
-    userDBRequests.createNewDeviceInfo(req.body)
+exports.createNewDeviceType = function (req, res, next) {
+    deviceTypeDBRequests.createNewDeviceInfo(dataExtractor.deviceType(req.body))
+        .then((doc) => {
+            res.send(response.responseOperationSuccess());
+        })
+        .catch((err) => {
+            if (err.code === 11000) {
+                res.send(response.responseOperationFail(mError.ALREADY_REGISTERED))
+            } else {
+                next(createError(500, mError.DATABASE_FAIL, err));
+            }
+        })
+};
+
+exports.editDeviceType = function (req, res, next) {
+    deviceTypeDBRequests.updateDeviceInfo({code: req.params.code}, dataExtractor.deviceType(req.body))
         .then((doc) => {
             res.send(response.responseOperationSuccess());
         })
@@ -14,19 +29,9 @@ exports.createNewDeviceInfo = function (req, res, next) {
         })
 };
 
-exports.updateDeviceInfo = function (req, res, next) {
-    userDBRequests.updateDeviceInfo({code: req.body.code}, req.body)
-        .then((doc) => {
-            res.send(response.responseOperationSuccess());
-        })
-        .catch((err) => {
-            next(createError(500, mError.DATABASE_FAIL, err));
-        })
-};
-
-exports.deleteDeviceInfo = function (req, res, next) {
+exports.deleteDeviceType = function (req, res, next) {
     if (req.body.unsafe && req.body.unsafe === 'true') {
-        userDBRequests.deleteDeviceInfo({code: req.body.code})
+        deviceTypeDBRequests.deleteDeviceInfo({code: req.params.code})
             .then((result) => {
                 res.send(response.responseOperationSuccess());
             })
@@ -34,7 +39,7 @@ exports.deleteDeviceInfo = function (req, res, next) {
                 next(createError(500, mError.DATABASE_FAIL, err));
             })
     } else {
-        userDBRequests.safeDeleteDeviceInfo({code: req.body.code})
+        deviceTypeDBRequests.safeDeleteDeviceInfo({code: req.params.code})
             .then((result) => {
                 res.send(response.responseOperationSuccess());
             })

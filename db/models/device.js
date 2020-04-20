@@ -21,7 +21,7 @@ const Device = new mongoose.Schema({
     },
     deviceType: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'DeviceInfo'
+        ref: 'DeviceType'
     },
     additionalData: {
         type: mongoose.Schema.Types.Mixed,

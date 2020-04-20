@@ -3,14 +3,15 @@ const response = require('../responseFactory');
 const mError = require('../constants/Errors');
 const userDBRequests = require('../db/functions/user');
 const deviceDBRequests = require('../db/functions/device');
-const deviceInfoDBRequests = require('../db/functions/deviceInfo');
+const deviceInfoDBRequests = require('../db/functions/deviceType');
+const dataExtractor = require('../functions/dataExtractor');
 
 exports.addDevice = function (req, res, next) {
     let dCode = req.body.deviceCode.slice(0, 6);
     deviceInfoDBRequests.findAndGetDeviceInfo({code: dCode})
-        .then((doc) => {
-            if (doc) {
-                deviceDBRequests.createNewDevice(extractDeviceData(req, doc))
+        .then((deviceTypeDoc) => {
+            if (deviceTypeDoc) {
+                deviceDBRequests.createNewDevice(dataExtractor.extractDataForDeviceCreation(req, deviceTypeDoc))
                     .then((deviceDoc) => {
                         userDBRequests.findAndUpdateUserInfo({_id: req.session.user.db_id},
                             {$push: {devices: deviceDoc._id}})
@@ -36,23 +37,15 @@ exports.addDevice = function (req, res, next) {
         })
 };
 
-function extractDeviceData(reqInfo, deviceInfo) {
-    return {
-        deviceCode: reqInfo.body.deviceCode,
-        deviceName: reqInfo.body.deviceName,
-        owner: reqInfo.session.user.db_id,
-        deviceType: deviceInfo._id
-    };
-}
-
-exports.updateDeviceName = function (req, res, next) {
-    deviceDBRequests.updateDevice({deviceCode: req.body.deviceCode, owner: req.session.user.db_id},
-        {deviceName: req.body.deviceName})
+exports.editDeviceInfo = function (req, res, next) {
+    deviceDBRequests.updateDevice({deviceCode: req.params.deviceCode, owner: req.session.user.db_id},
+        dataExtractor.device(req.body))
         .then((doc) => {
             if (doc) {
                 res.send(response.responseOperationSuccess());
             } else {
-                res.send(response.responseOperationFail(mError.USER_DATA_WRONG));
+                next(createError(404, mError.NOT_FOUND));
+                //res.send(response.responseOperationFail(mError.USER_DATA_WRONG));
             }
         })
         .catch((err) => {
@@ -61,10 +54,9 @@ exports.updateDeviceName = function (req, res, next) {
 };
 
 exports.deleteDevice = function (req, res, next) {
-    deviceDBRequests.findAndDeleteDevice({deviceCode: req.body.deviceCode, owner: req.session.user.db_id})
+    deviceDBRequests.findAndDeleteDevice({deviceCode: req.params.deviceCode, owner: req.session.user.db_id})
         .then((result) => {
             if (result) {
-                console.log(result);
                 userDBRequests.findAndUpdateUserInfo({_id: req.session.user.db_id}, {$pull: {devices: result._id}})
                     .then((doc) => {
                         res.send(response.responseOperationSuccess());
@@ -79,7 +71,7 @@ exports.deleteDevice = function (req, res, next) {
 };
 
 exports.getDeviceInfo = function (req, res, next) {
-    deviceDBRequests.getInsensitiveDeviceData({deviceCode: req.body.code, owner: req.session.user.db_id})
+    deviceDBRequests.getInsensitiveDeviceData({deviceCode: req.params.deviceCode, owner: req.session.user.db_id})
         .then((result) => {
             if (result) {
                 res.send(response.responseWithDataSuccess(result));

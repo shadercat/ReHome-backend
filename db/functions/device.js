@@ -9,7 +9,8 @@ exports.getDevice = function (query) {
 };
 
 exports.getInsensitiveDeviceData = function (query) {
-    return deviceModel.findOne(query).select({owner: 0, _id: 0});
+    return deviceModel.findOne(query).select({owner: 0, _id: 0, __v: 0, updatedAt: 0})
+        .populate({path: 'deviceType', select: {_id: 0, __v: 0, updatedAt: 0, triggers: 0}});
 };
 
 exports.updateDevice = function (query, data) {

@@ -9,8 +9,4 @@ router.get('/', function (req, res, next) {
 
 router.get('/devices', openInfo.getDevicesInfo);
 
-router.get('/error', function (req, res, next) {
-    next(createError())
-});
-
 module.exports = router;

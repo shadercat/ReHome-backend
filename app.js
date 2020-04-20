@@ -50,9 +50,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(modifier.setResponseHeaders);
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/admins', adminRouter);
-app.use('/devices', deviceRouter);
+app.use('/user', usersRouter);
+app.use('/admin', adminRouter);
+app.use('/device', deviceRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

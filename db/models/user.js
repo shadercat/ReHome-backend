@@ -29,7 +29,6 @@ const User = new mongoose.Schema({
     additionalData: {
         type: mongoose.Schema.Types.Mixed,
         default: {}
-
     }
 }, {timestamps: true});
 

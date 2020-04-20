@@ -1,6 +1,7 @@
 const response = require('../responseFactory');
 const mError = require('../constants/Errors');
 const userDBRequests = require('../db/functions/admin');
+const dataExtractor = require('../functions/dataExtractor');
 const createError = require('http-errors');
 
 
@@ -39,7 +40,7 @@ exports.logoutAdmin = function (req, res, next) {
 };
 
 exports.registerNewAdmin = function (req, res, next) {
-    userDBRequests.createAdmin(req.body)
+    userDBRequests.createAdmin(dataExtractor.adminCreation(req.body))
         .then((result) => {
             res.send(response.responseOperationSuccess());
         })

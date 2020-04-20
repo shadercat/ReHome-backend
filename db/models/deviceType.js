@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const DeviceInfo = new mongoose.Schema({
+const DeviceType = new mongoose.Schema({
     code: {
         type: String,
         required: true,
@@ -20,4 +20,4 @@ const DeviceInfo = new mongoose.Schema({
     }
 }, {timestamps: true});
 
-module.exports = mongoose.model('DeviceInfo', DeviceInfo);
+module.exports = mongoose.model('DeviceType', DeviceType);

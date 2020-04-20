@@ -1,6 +1,7 @@
 const response = require('../responseFactory');
 const mError = require('../constants/Errors');
 const userDBRequests = require('../db/functions/user');
+const dataExtractor = require('../functions/dataExtractor');
 const createError = require('http-errors');
 
 exports.getIsAuthorized = function (req, res, next) {
@@ -38,7 +39,7 @@ exports.logout = function (req, res, next) {
 };
 
 exports.registerNewUser = function (req, res, next) {
-    userDBRequests.createUser(req.body)
+    userDBRequests.createUser(dataExtractor.userCreation(req.body))
         .then((result) => {
             res.send(response.responseOperationSuccess());
         })

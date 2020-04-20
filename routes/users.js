@@ -10,8 +10,8 @@ router.post('/login', accountModule.login);
 
 router.post('/logout', accountModule.logout);
 
-router.post('/signup', accountModule.registerNewUser);
+router.post('/create', accountModule.registerNewUser);
 
-router.get('/userdata', accessModule.onlyAuthorizedUserDoor, userModule.getUserData);
+router.get('/', accessModule.onlyAuthorizedUserDoor, userModule.getUserData);
 
 module.exports = router;

@@ -8,16 +8,16 @@ router.post('/login', adminModule.loginAsAdmin);
 
 router.get('/authorized', adminModule.getIsAuthorizedAsAdmin);
 
-router.post('/reg', adminModule.registerNewAdmin);
+router.post('/create', adminModule.registerNewAdmin);
 
 router.post('/logout', adminModule.logoutAdmin);
 
-router.get('/admindata', accessModule.onlyAuthorizedAdminDoor, adminModule.getAdminData);
+router.post('/device/create', accessModule.onlyAuthorizedAdminDoor, adminOperationModule.createNewDeviceType);
 
-router.post('/newdevice', accessModule.onlyAuthorizedAdminDoor, adminOperationModule.createNewDeviceInfo);
+router.delete('/device/:code/delete', accessModule.onlyAuthorizedAdminDoor, adminOperationModule.deleteDeviceType);
 
-router.delete('/deldevice', accessModule.onlyAuthorizedAdminDoor, adminOperationModule.deleteDeviceInfo);
+router.post('/device/:code/edit', accessModule.onlyAuthorizedAdminDoor, adminOperationModule.editDeviceType);
 
-router.post('/updatedevice', accessModule.onlyAuthorizedAdminDoor, adminOperationModule.updateDeviceInfo);
+router.get('/', accessModule.onlyAuthorizedAdminDoor, adminModule.getAdminData);
 
 module.exports = router;
