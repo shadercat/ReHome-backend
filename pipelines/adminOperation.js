@@ -1,6 +1,7 @@
 const response = require('../responseFactory');
 const userDBRequests = require('../db/functions/deviceInfo');
-const errorHandler = require('../functions/errorHandler');
+const createError = require('http-errors');
+const mError = require('../constants/Errors');
 
 
 exports.createNewDeviceInfo = function (req, res, next) {
@@ -9,7 +10,7 @@ exports.createNewDeviceInfo = function (req, res, next) {
             res.send(response.responseOperationSuccess());
         })
         .catch((err) => {
-            errorHandler.errorHandler(err, res);
+            next(createError(500, mError.DATABASE_FAIL, err));
         })
 };
 
@@ -19,7 +20,7 @@ exports.updateDeviceInfo = function (req, res, next) {
             res.send(response.responseOperationSuccess());
         })
         .catch((err) => {
-            errorHandler.errorHandler(err, res);
+            next(createError(500, mError.DATABASE_FAIL, err));
         })
 };
 
@@ -30,7 +31,7 @@ exports.deleteDeviceInfo = function (req, res, next) {
                 res.send(response.responseOperationSuccess());
             })
             .catch((err) => {
-                errorHandler.errorHandler(err, res);
+                next(createError(500, mError.DATABASE_FAIL, err));
             })
     } else {
         userDBRequests.safeDeleteDeviceInfo({code: req.body.code})
@@ -38,7 +39,7 @@ exports.deleteDeviceInfo = function (req, res, next) {
                 res.send(response.responseOperationSuccess());
             })
             .catch((err) => {
-                errorHandler.errorHandler(err, res);
+                next(createError(500, mError.DATABASE_FAIL, err));
             })
     }
 };

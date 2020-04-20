@@ -1,7 +1,7 @@
 const response = require('../responseFactory');
 const mError = require('../constants/Errors');
 const userDBRequests = require('../db/functions/user');
-const errorHandler = require('../functions/errorHandler');
+const createError = require('http-errors');
 
 exports.getIsAuthorized = function (req, res, next) {
     if (req.session.user && !req.session.user.isAdmin) {
@@ -24,7 +24,7 @@ exports.login = function (req, res, next) {
             }
         })
         .catch((error) => {
-            errorHandler.errorHandler(error, res);
+            next(createError(500, mError.DATABASE_FAIL, error));
         })
 };
 
@@ -33,7 +33,7 @@ exports.logout = function (req, res, next) {
         req.session.destroy();
         res.send(response.responseOperationSuccess());
     } else {
-        res.status(401).send(response.responseOperationFail(mError.UNAUTHORIZED));
+        next(createError(401, mError.UNAUTHORIZED));
     }
 };
 
@@ -46,7 +46,7 @@ exports.registerNewUser = function (req, res, next) {
             if (error.code === 11000) {
                 res.send(response.responseOperationFail(mError.ALREADY_REGISTERED));
             } else {
-                errorHandler.errorHandler(error, response);
+                next(createError(500, mError.DATABASE_FAIL, error));
             }
         })
 };

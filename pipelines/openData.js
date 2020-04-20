@@ -1,6 +1,8 @@
 const response = require('../responseFactory');
 const DBRequests = require('../db/functions/deviceInfo');
-const errorHandler = require('../functions/errorHandler');
+const createError = require('http-errors');
+const mError = require('../constants/Errors');
+
 
 exports.getDevicesInfo = function (req, res, next) {
     DBRequests.getDevicesInfo()
@@ -8,6 +10,6 @@ exports.getDevicesInfo = function (req, res, next) {
             res.send(response.responseWithDataSuccess(docs));
         })
         .catch((err) => {
-            errorHandler.errorHandler(err, res);
+            next(createError(500, mError.DATABASE_FAIL, err));
         })
 };

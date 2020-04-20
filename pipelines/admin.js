@@ -1,7 +1,8 @@
 const response = require('../responseFactory');
 const mError = require('../constants/Errors');
 const userDBRequests = require('../db/functions/admin');
-const errorHandler = require('../functions/errorHandler');
+const createError = require('http-errors');
+
 
 exports.getIsAuthorizedAsAdmin = function (req, res, next) {
     if (req.session.user && req.session.user.isAdmin) {
@@ -23,8 +24,8 @@ exports.loginAsAdmin = function (req, res, next) {
                 res.send(response.responseOperationFail(mError.USER_DATA_WRONG));
             }
         })
-        .catch((error) => {
-            errorHandler.errorHandler(error, res);
+        .catch((err) => {
+            next(createError(500, mError.DATABASE_FAIL, err));
         })
 };
 
@@ -33,7 +34,7 @@ exports.logoutAdmin = function (req, res, next) {
         req.session.destroy();
         res.send(response.responseOperationSuccess());
     } else {
-        res.status(401).send(response.responseOperationFail(mError.UNAUTHORIZED));
+        next(createError(401, mError.UNAUTHORIZED));
     }
 };
 
@@ -42,11 +43,11 @@ exports.registerNewAdmin = function (req, res, next) {
         .then((result) => {
             res.send(response.responseOperationSuccess());
         })
-        .catch((error) => {
-            if (error.code === 11000) {
+        .catch((err) => {
+            if (err.code === 11000) {
                 res.send(response.responseOperationFail(mError.ALREADY_REGISTERED));
             } else {
-                errorHandler.errorHandler(error, response);
+                next(createError(500, mError.DATABASE_FAIL, err))
             }
         })
 };
@@ -57,7 +58,7 @@ exports.getAdminData = function (req, res, next) {
             res.send(response.responseWithDataSuccess(doc));
         })
         .catch((err) => {
-            errorHandler.errorHandler(err, res);
+            next(createError(500, mError.DATABASE_FAIL, err))
         });
 };
 

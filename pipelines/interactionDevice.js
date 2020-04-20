@@ -1,9 +1,9 @@
+const createError = require('http-errors');
 const response = require('../responseFactory');
 const mError = require('../constants/Errors');
 const userDBRequests = require('../db/functions/user');
 const deviceDBRequests = require('../db/functions/device');
 const deviceInfoDBRequests = require('../db/functions/deviceInfo');
-const errorHandler = require('../functions/errorHandler');
 
 exports.addDevice = function (req, res, next) {
     let dCode = req.body.deviceCode.slice(0, 6);
@@ -17,22 +17,22 @@ exports.addDevice = function (req, res, next) {
                             .then((result) => {
                                 res.send(response.responseOperationSuccess());
                             })
-                            .catch((error) => {
-                                errorHandler.errorHandler(error, res);
+                            .catch((err) => {
+                                next(createError(500, mError.DATABASE_FAIL, err));
                             })
                     })
-                    .catch((error) => {
-                        if (error.code === 11000) {
+                    .catch((err) => {
+                        if (err.code === 11000) {
                             return res.send(response.responseOperationFail(mError.ALREADY_REGISTERED));
                         }
-                        errorHandler.errorHandler(error, res);
+                        next(createError(500, mError.DATABASE_FAIL, err));
                     })
             } else {
                 res.send(response.responseOperationFail(mError.USER_DATA_WRONG));
             }
         })
-        .catch((error) => {
-            errorHandler.errorHandler(error, res);
+        .catch((err) => {
+            next(createError(500, mError.DATABASE_FAIL, err));
         })
 };
 
@@ -56,7 +56,7 @@ exports.updateDeviceName = function (req, res, next) {
             }
         })
         .catch((err) => {
-            errorHandler.errorHandler(err, res);
+            next(createError(500, mError.DATABASE_FAIL, err));
         })
 };
 
@@ -70,11 +70,11 @@ exports.deleteDevice = function (req, res, next) {
                         res.send(response.responseOperationSuccess());
                     });
             } else {
-                res.send(response.responseOperationFail(mError.OPERATION_DENIED));
+                next(createError(404, mError.NOT_FOUND));
             }
         })
-        .catch((error) => {
-            errorHandler.errorHandler(error, res);
+        .catch((err) => {
+            next(createError(500, mError.DATABASE_FAIL, err));
         })
 };
 
@@ -84,10 +84,10 @@ exports.getDeviceInfo = function (req, res, next) {
             if (result) {
                 res.send(response.responseWithDataSuccess(result));
             } else {
-                res.send(response.responseWithDataFail(mError.NOT_FOUND));
+                next(createError(404, mError.NOT_FOUND));
             }
         })
-        .catch((error) => {
-            errorHandler.errorHandler(error, res);
+        .catch((err) => {
+            next(createError(500, mError.DATABASE_FAIL, err));
         })
 };

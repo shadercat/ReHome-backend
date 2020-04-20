@@ -1,6 +1,7 @@
 const response = require('../responseFactory');
 const userDBRequests = require('../db/functions/user');
-const errorHandler = require('../functions/errorHandler');
+const createError = require('http-errors');
+const mError = require('../constants/Errors');
 
 
 exports.getUserData = function (req, res, next) {
@@ -9,7 +10,7 @@ exports.getUserData = function (req, res, next) {
             res.send(response.responseWithDataSuccess(doc));
         })
         .catch((err) => {
-            errorHandler.errorHandler(err, res);
+            next(createError(500, mError.DATABASE_FAIL, err));
         });
 };
 

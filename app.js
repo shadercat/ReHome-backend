@@ -7,6 +7,7 @@ const session = require('express-session');
 
 const dbConnection = require('./db/dbConnection');
 const errorHandler = require('./functions/errorHandler');
+const mError = require('./constants/Errors');
 const modifier = require('./functions/responseModifier');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -55,18 +56,12 @@ app.use('/devices', deviceRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    next(createError(404));
-});
-
-app.use(function (err, req, res, next) {
-    if (!err.properties) {
-        next(err);
-    } else {
-        errorHandler(err.properties, res);
-    }
+    next(createError(404, mError.NOT_FOUND));
 });
 
 // error handler
+app.use(errorHandler.errorRouteHandler);
+
 app.use(function (err, req, res, next) {
     // set locals, only providing error in development
     res.locals.message = err.message;
