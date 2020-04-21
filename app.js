@@ -10,7 +10,7 @@ const errorHandler = require('./functions/errorHandler');
 const mError = require('./constants/Errors');
 const modifier = require('./functions/responseModifier');
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const usersRouter = require('./routes/user');
 const adminRouter = require('./routes/admin');
 const deviceRouter = require('./routes/device');
 

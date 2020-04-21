@@ -4,6 +4,10 @@ exports.deviceType = function (source) {
     return pick(source, ['name', 'description', 'code']);
 };
 
+exports.deviceTypeTriggers = function (source) {
+    return pick(source, ['triggers']);
+};
+
 exports.device = function (source) {
     return pick(source, ['deviceName', 'additionalData']);
 };

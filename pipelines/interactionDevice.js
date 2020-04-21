@@ -8,7 +8,7 @@ const dataExtractor = require('../functions/dataExtractor');
 
 exports.addDevice = function (req, res, next) {
     let dCode = req.body.deviceCode.slice(0, 6);
-    deviceInfoDBRequests.findAndGetDeviceInfo({code: dCode})
+    deviceInfoDBRequests.findAndGetDeviceType({code: dCode})
         .then((deviceTypeDoc) => {
             if (deviceTypeDoc) {
                 deviceDBRequests.createNewDevice(dataExtractor.extractDataForDeviceCreation(req, deviceTypeDoc))

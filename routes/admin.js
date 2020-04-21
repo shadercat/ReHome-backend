@@ -14,9 +14,13 @@ router.post('/logout', adminModule.logoutAdmin);
 
 router.post('/device/create', accessModule.onlyAuthorizedAdminDoor, adminOperationModule.createNewDeviceType);
 
+router.post('/device/:code/triggers/edit', accessModule.onlyAuthorizedAdminDoor, adminOperationModule.editDeviceTypeTriggers);
+
 router.delete('/device/:code/delete', accessModule.onlyAuthorizedAdminDoor, adminOperationModule.deleteDeviceType);
 
 router.post('/device/:code/edit', accessModule.onlyAuthorizedAdminDoor, adminOperationModule.editDeviceType);
+
+router.get('/device/:code', accessModule.onlyAuthorizedAdminDoor, adminOperationModule.getDeviceTypeInfo);
 
 router.get('/', accessModule.onlyAuthorizedAdminDoor, adminModule.getAdminData);
 

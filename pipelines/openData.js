@@ -5,7 +5,7 @@ const mError = require('../constants/Errors');
 
 
 exports.getDevicesInfo = function (req, res, next) {
-    DBRequests.getDevicesInfo()
+    DBRequests.getDevicesType()
         .then((docs) => {
             res.send(response.responseWithDataSuccess(docs));
         })

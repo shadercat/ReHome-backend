@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post('/register', accessModule.onlyAuthorizedUserDoor, deviceModule.addDevice);
 
-router.post('/:deviceCode/update', accessModule.onlyAuthorizedUserDoor, deviceModule.editDeviceInfo);
+router.post('/:deviceCode/edit', accessModule.onlyAuthorizedUserDoor, deviceModule.editDeviceInfo);
 
 router.delete('/:deviceCode/delete', accessModule.onlyAuthorizedUserDoor, deviceModule.deleteDevice);
 

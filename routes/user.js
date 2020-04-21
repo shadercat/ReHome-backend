@@ -12,6 +12,8 @@ router.post('/logout', accountModule.logout);
 
 router.post('/create', accountModule.registerNewUser);
 
+router.post('/edit', accessModule.onlyAuthorizedUserDoor, userModule.editUserData);
+
 router.get('/', accessModule.onlyAuthorizedUserDoor, userModule.getUserData);
 
 module.exports = router;
