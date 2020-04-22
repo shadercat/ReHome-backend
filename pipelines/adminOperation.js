@@ -1,5 +1,6 @@
 const response = require('../responseFactory');
 const deviceTypeDBRequests = require('../db/functions/deviceType');
+const recomDBRequests = require('../db/functions/recommendation');
 const createError = require('http-errors');
 const mError = require('../constants/Errors');
 const dataExtractor = require('../functions/dataExtractor');
@@ -69,6 +70,47 @@ exports.editDeviceTypeTriggers = function (req, res, next) {
     deviceTypeDBRequests.updateDeviceType({code: req.params.code}, dataExtractor.deviceTypeTriggers(req.body))
         .then((result) => {
             res.send(response.responseOperationSuccess());
+        })
+        .catch((err) => {
+            next(createError(500, mError.DATABASE_FAIL, err));
+        })
+};
+
+exports.createNewRecommendation = function (req, res, next) {
+    if (req.body.target) {
+        req.body.target = JSON.parse(req.body.target);
+    }
+    recomDBRequests.createNewRecommendation(dataExtractor.recommendation(req.body))
+        .then((doc) => {
+            res.send(response.responseOperationSuccess());
+        })
+        .catch((err) => {
+            next(createError(500, mError.DATABASE_FAIL, err));
+        })
+};
+
+exports.editRecommendation = function (req, res, next) {
+    recomDBRequests.editRecommendation({_id: req.params.id}, dataExtractor.recommendation(req.body))
+        .then((doc) => {
+            if (doc) {
+                res.send(response.responseOperationSuccess());
+            } else {
+                next(createError(404, mError.NOT_FOUND));
+            }
+        })
+        .catch((err) => {
+            next(createError(500, mError.DATABASE_FAIL, err));
+        })
+};
+
+exports.deleteRecommendation = function (req, res, next) {
+    recomDBRequests.deleteRecommendation({_id: req.params.id})
+        .then((doc) => {
+            if (doc) {
+                res.send(response.responseOperationSuccess());
+            } else {
+                next(createError(404, mError.NOT_FOUND));
+            }
         })
         .catch((err) => {
             next(createError(500, mError.DATABASE_FAIL, err));

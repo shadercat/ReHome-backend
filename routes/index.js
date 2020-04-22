@@ -9,4 +9,13 @@ router.get('/', function (req, res, next) {
 
 router.get('/models/devices', openInfo.getDevicesInfo);
 
+router.get('/recommendations', openInfo.getRecommendations);
+
+router.get('/recommendations/find', openInfo.findRecommendation);
+
+router.get('/recommendation/:codeWord/:lang', openInfo.getRecommendationLang);
+
+router.get('/recommendation/:id', openInfo.getRecommendation);
+
+
 module.exports = router;
