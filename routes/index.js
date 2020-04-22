@@ -7,6 +7,6 @@ router.get('/', function (req, res, next) {
     res.render('index', {title: 'Express'});
 });
 
-router.get('/devices', openInfo.getDevicesInfo);
+router.get('/models/devices', openInfo.getDevicesInfo);
 
 module.exports = router;

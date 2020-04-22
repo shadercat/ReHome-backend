@@ -20,3 +20,17 @@ exports.updateDevice = function (query, data) {
 exports.findAndDeleteDevice = function (query) {
     return deviceModel.findOneAndDelete(query);
 };
+
+exports.findDevicesInsensitiveData = function (query, page) {
+    let skipped = (parseInt(page) - 1) * 20;
+    return deviceModel.find(query).select({owner: 0, _id: 0, __v: 0, updatedAt: 0})
+        .skip(skipped)
+        .limit(20)
+        .populate({
+            path: 'deviceType',
+            select: {
+                _id: 0,
+                name: 1
+            }
+        });
+};

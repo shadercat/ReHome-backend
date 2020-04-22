@@ -12,9 +12,12 @@ exports.deleteDeviceType = function (query) {
     return deviceTypeModel.deleteOne(query);
 };
 
-exports.getDevicesType = function () {
+exports.getDevicesType = function (page) {
+    let skipped = (parseInt(page) - 1) * 20;
     return deviceTypeModel.find()
-        .select({triggers: 0, _id: 0});
+        .select({triggers: 0, _id: 0, updatedAt: 0, __v: 0})
+        .skip(skipped)
+        .limit(20);
 };
 
 exports.findAndGetDeviceType = function (query) {

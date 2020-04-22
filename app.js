@@ -13,6 +13,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/user');
 const adminRouter = require('./routes/admin');
 const deviceRouter = require('./routes/device');
+const groupsRouter = require('./routes/resourceGroup');
 
 const SessionStore = require('connect-mongo')(session);
 
@@ -53,6 +54,7 @@ app.use('/', indexRouter);
 app.use('/user', usersRouter);
 app.use('/admin', adminRouter);
 app.use('/device', deviceRouter);
+app.use('/resourcegroup', groupsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
