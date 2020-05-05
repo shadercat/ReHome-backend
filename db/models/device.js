@@ -7,8 +7,18 @@ const Device = new mongoose.Schema({
         required: true
     },
     deviceStatus: {
-        type: mongoose.Schema.Types.Mixed,
-        default: {}
+        status: {
+            type: String,
+            default: "offline"
+        },
+        state: {
+            type: String,
+            default: "unknown"
+        },
+        other: {
+            type: mongoose.Schema.Types.Mixed,
+            default: {}
+        }
     },
     deviceName: {
         type: String,

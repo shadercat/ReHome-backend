@@ -90,7 +90,7 @@ exports.addDeviceToResourceGroup = function (req, res, next) {
 };
 
 exports.deleteDeviceFromResourceGroup = function (req, res, next) {
-    deviceDBRequests.getDevice({deviceCode: req.body.deviceCode, owner: req.session.user.db_id})
+    deviceDBRequests.getDevice({deviceCode: req.params.deviceCode, owner: req.session.user.db_id})
         .then((deviceDoc) => {
             if (deviceDoc) {
                 groupDBRequests.deleteDeviceFromResourceGroup({_id: req.params.id, owner: req.session.user.db_id},

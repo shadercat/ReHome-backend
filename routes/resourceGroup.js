@@ -12,7 +12,7 @@ router.get('/:id', accessModule.onlyAuthorizedUserDoor, groupModel.getResourceGr
 
 router.post('/:id/devices/add', accessModule.onlyAuthorizedUserDoor, groupModel.addDeviceToResourceGroup);
 
-router.delete('/:id/devices/delete', accessModule.onlyAuthorizedUserDoor, groupModel.deleteDeviceFromResourceGroup);
+router.delete('/:id/devices/:deviceCode/delete', accessModule.onlyAuthorizedUserDoor, groupModel.deleteDeviceFromResourceGroup);
 
 router.get('/:id/devices', accessModule.onlyAuthorizedUserDoor, groupModel.getGroupsDevices);
 

@@ -31,10 +31,10 @@ exports.getDevicesFromGroup = function (query, page) {
         .populate({
             path: 'devices',
             select: {
+                owner: 0,
                 _id: 0,
-                deviceName: 1,
-                deviceCode: 1,
-                createAt: 1
+                __v: 0,
+                updatedAt: 0
             },
             populate: {
                 path: 'deviceType',
