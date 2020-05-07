@@ -56,3 +56,7 @@ exports.deleteDeviceFromResourceGroup = function (query, device_id) {
     return resourceGroupModel.findOneAndUpdate(query, {$pull: {devices: device_id}}, {new: true});
 };
 
+exports.deleteResourceGroup = function (query) {
+    return resourceGroupModel.findOneAndDelete(query);
+};
+

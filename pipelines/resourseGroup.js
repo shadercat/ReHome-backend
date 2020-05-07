@@ -128,3 +128,17 @@ exports.getGroupsDevices = function (req, res, next) {
             next(createError(500, mError.DATABASE_FAIL, err));
         })
 };
+
+exports.deleteResourceGroup = function (req, res, next) {
+    groupDBRequests.deleteResourceGroup({owner: req.session.user.db_id, _id: req.params.id})
+        .then((doc) => {
+            if (doc) {
+                res.send(response.responseOperationSuccess());
+            } else {
+                next(createError(404, mError.NOT_FOUND));
+            }
+        })
+        .catch((err) => {
+            next(createError(500, mError.DATABASE_FAIL, err));
+        })
+};

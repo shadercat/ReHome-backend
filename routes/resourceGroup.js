@@ -16,5 +16,7 @@ router.delete('/:id/devices/:deviceCode/delete', accessModule.onlyAuthorizedUser
 
 router.get('/:id/devices', accessModule.onlyAuthorizedUserDoor, groupModel.getGroupsDevices);
 
+router.delete('/:id/delete', accessModule.onlyAuthorizedUserDoor, groupModel.deleteResourceGroup);
+
 
 module.exports = router;
