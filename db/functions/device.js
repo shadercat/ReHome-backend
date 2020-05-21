@@ -22,7 +22,12 @@ exports.findAndDeleteDevice = function (query) {
 };
 
 exports.findDevicesInsensitiveData = function (query, page) {
-    let skipped = (parseInt(page) - 1) * 20;
+    let skipped;
+    if (page > 0) {
+        skipped = (parseInt(page) - 1) * 20;
+    } else {
+        skipped = 0;
+    }
     return deviceModel.find(query).select({owner: 0, _id: 0, __v: 0, updatedAt: 0})
         .skip(skipped)
         .limit(20)

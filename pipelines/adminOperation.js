@@ -90,6 +90,9 @@ exports.createNewRecommendation = function (req, res, next) {
 };
 
 exports.editRecommendation = function (req, res, next) {
+    if (req.body.target) {
+        req.body.target = JSON.parse(req.body.target);
+    }
     recomDBRequests.editRecommendation({_id: req.params.id}, dataExtractor.recommendation(req.body))
         .then((doc) => {
             if (doc) {

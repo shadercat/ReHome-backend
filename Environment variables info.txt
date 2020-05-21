@@ -3,4 +3,4 @@ DATABASE_CONNECTION_STRING - connection string to MongoDB
 SESSION_SECRET - session secret string for session info encrypting
 SECURE_COOKIE - "secure cookie" setting in response headers
 SAME_SITE - "same site" setting in response headers
-
+CREDENTIAL_SITE - frontend site
